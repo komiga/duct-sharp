@@ -1,0 +1,5 @@
+# Builds
+*.exe
+*.dll
+*.pidb
+*.mdb

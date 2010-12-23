@@ -1,0 +1,24 @@
+﻿<Properties>
+  <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug|x86" ctype="Workspace" />
+  <MonoDevelop.Ide.Workbench ActiveDocument="scriptformatter/scriptformatter.cs" ctype="Workbench">
+    <Files>
+      <File FileName="scriptformatter/scriptformatter.cs" Line="28" Column="145" />
+      <File FileName="templates/templates.cs" Line="1" Column="1" />
+      <File FileName="csv/csv.cs" Line="1" Column="1" />
+    </Files>
+    <Pads>
+      <Pad Id="ProjectPad">
+        <State expanded="True">
+          <Node name="csv" expanded="True" />
+          <Node name="scriptformatter" expanded="True">
+            <Node name="scriptformatter.cs" selected="True" />
+          </Node>
+          <Node name="templates" expanded="True" />
+        </State>
+      </Pad>
+      <Pad Id="ClassPad">
+        <State expanded="True" selected="True" />
+      </Pad>
+    </Pads>
+  </MonoDevelop.Ide.Workbench>
+</Properties>

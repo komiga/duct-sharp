@@ -1,0 +1,3 @@
+duct# is a duct port to C#.
+It has been build and tested only in Mono so far, but should work with .NET just fine.
+This is currently the most non-complete port, though it implements some new features to the variable/script framework.

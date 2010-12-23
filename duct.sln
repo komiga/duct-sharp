@@ -1,0 +1,25 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 10.00
+# Visual Studio 2008
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "duct", "duct.csproj", "{969A230C-1DC8-4D51-A65E-E131A07B2775}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{969A230C-1DC8-4D51-A65E-E131A07B2775}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{969A230C-1DC8-4D51-A65E-E131A07B2775}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{969A230C-1DC8-4D51-A65E-E131A07B2775}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{969A230C-1DC8-4D51-A65E-E131A07B2775}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(MonoDevelopProperties) = preSolution
+		description = duct library for C#
+		StartupItem = duct.csproj
+		Policies = $0
+		$0.DotNetNamingPolicy = $1
+		$1.DirectoryNamespaceAssociation = None
+		$1.ResourceNamePolicy = FileFormatDefault
+	EndGlobalSection
+EndGlobal
