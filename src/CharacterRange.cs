@@ -7,35 +7,35 @@ namespace duct {
 public class CharacterRange {
 	char _start;
 	public char Start {
-		set { _start = value; }
+		set { _start=value; }
 		get { return _start; }
 	}
 
 	char _end;
 	public char End {
-		set { _end = value; }
+		set { _end=value; }
 		get { return _end; }
 	}
 
 	public CharacterRange(char start, uint length) {
-		_start = start;
-		_end = Convert.ToChar(_start + length);
+		_start=start;
+		_end=Convert.ToChar(_start+length);
 	}
 
 	public CharacterRange(char start, char end) {
-		_start = start;
-		if (end < _start)
+		_start=start;
+		if (end<_start)
 			throw new Exception("End of range must be lower than or equal to the start");
-		_end = end;
+		_end=end;
 	}
 
 	public CharacterRange(char start) {
-		_start = start;
-		_end = start;
+		_start=start;
+		_end=start;
 	}
 
 	public bool Contains(char c) {
-		return (_start == c || (c >= _start && c <= _end));
+		return (_start==c || (c>=_start && c<=_end));
 	}
 
 	public int FindInString(string str) {
@@ -43,9 +43,9 @@ public class CharacterRange {
 	}
 
 	public int FindInString(string str, uint startfrom) {
-		if (startfrom >= str.Length)
+		if (startfrom>=str.Length)
 			return -1;
-		for (int i = (int)startfrom; (uint)i < str.Length; ++i) {
+		for (int i=(int)startfrom; (uint)i<str.Length; ++i) {
 			if (Contains(str[i])) {
 				return i;
 			}
@@ -58,9 +58,9 @@ public class CharacterRange {
 	}
 
 	public int FindLastInString(string str, int startfrom) {
-		if (startfrom == -1)
-			startfrom = str.Length - 1;
-		for (int i = startfrom; i > -1; --i) {
+		if (startfrom==-1)
+			startfrom=str.Length-1;
+		for (int i=startfrom; i>-1; --i) {
 			if (Contains(str[i])) {
 				return i;
 			}
@@ -69,34 +69,34 @@ public class CharacterRange {
 	}
 
 	public int Compare(CharacterRange other) {
-		int sd = _end - _start;
-		int od = other._end - other._start;
-		if (sd < od) {
+		int sd=_end-_start;
+		int od=other._end-other._start;
+		if (sd<od) {
 			return -1;
-		} else if (sd > od) {
+		} else if (sd>od) {
 			return 1;
 		}
-		if (_start < other._start) {
+		if (_start<other._start) {
 			return -1;
-		} else if (_start > other._start) {
+		} else if (_start>other._start) {
 			return 1;
 		}
 		return 0;
 	}
 
 	public bool Intersects(CharacterRange other) {
-		if (Compare(other) == 0)
+		if (Compare(other)==0)
 			return true;
-		if (_end == (other._start - 1))
+		if (_end==(other._start-1))
 			return true;
-		else if ((_start - 1) == other._end)
+		else if ((_start-1)==other._end)
 			return true;
-		return !(_start > other._end || _end < other._start);
+		return !(_start>other._end || _end<other._start);
 	}
 }
 
 public class CharacterSet {
-	List<CharacterRange> _ranges = new List<CharacterRange>();
+	List<CharacterRange> _ranges=new List<CharacterRange>();
 
 	public CharacterSet() {
 	}
@@ -127,7 +127,7 @@ public class CharacterSet {
 
 	public bool Contains(CharacterRange other) {
 		foreach (CharacterRange range in _ranges) {
-			if (range == other || range.Compare(other) == 0)
+			if (range==other || range.Compare(other)==0)
 				return true;
 		}
 		return false;
@@ -138,12 +138,12 @@ public class CharacterSet {
 	}
 
 	public int FindInString(string str, uint startfrom) {
-		if (startfrom >= str.Length)
+		if (startfrom>=str.Length)
 			return -1;
 		int i;
 		foreach (CharacterRange range in _ranges) {
-			i = range.FindInString(str, startfrom);
-			if (i != -1)
+			i=range.FindInString(str, startfrom);
+			if (i!=-1)
 				return i;
 		}
 		return -1;
@@ -154,13 +154,13 @@ public class CharacterSet {
 	}
 
 	public int FindLastInString(string str, int startfrom) {
-		if (startfrom == -1)
-			startfrom = str.Length - 1;
-		int result = -1, i;
+		if (startfrom==-1)
+			startfrom=str.Length-1;
+		int result=-1, i;
 		foreach (CharacterRange range in _ranges) {
-			i = range.FindLastInString(str, startfrom);
-			if (i != -1 && (i > result || result == -1))
-				result = i;
+			i=range.FindLastInString(str, startfrom);
+			if (i!=-1 && (i>result || result==-1))
+				result=i;
 		}
 		return result;
 	}
@@ -182,40 +182,40 @@ public class CharacterSet {
 	}
 
 	public void AddRangesWithString(string str) {
-		const char CHAR_DASH = '-';
-		const char CHAR_ESCAPE = '\\';
-		char lastchar = '\xFFFF', chr;
-		bool isrange = false, escape = false;
-		for (int i = 0; i < str.Length; ++i) {
-			chr = str[i];
+		const char CHAR_DASH='-';
+		const char CHAR_ESCAPE='\\';
+		char lastchar='\xFFFF', chr;
+		bool isrange=false, escape=false;
+		for (int i=0; i<str.Length; ++i) {
+			chr=str[i];
 			if (escape) {
-				escape = false;
-			} else if (chr == CHAR_ESCAPE) {
-				escape = true;
+				escape=false;
+			} else if (chr==CHAR_ESCAPE) {
+				escape=true;
 				continue;
-			} else if (lastchar != 0xFFFF && chr == CHAR_DASH && !isrange) {
-				isrange = true;
+			} else if (lastchar!=0xFFFF && chr==CHAR_DASH && !isrange) {
+				isrange=true;
 				continue;
 			}
-			if (lastchar != 0xFFFF) {
+			if (lastchar!=0xFFFF) {
 				if (isrange) {
-					if (chr == lastchar)
+					if (chr==lastchar)
 						AddRange(chr);
-					else if (chr < lastchar)
-						AddRange(chr, (uint)(lastchar - chr));
+					else if (chr<lastchar)
+						AddRange(chr, (uint)(lastchar-chr));
 					else
-						AddRange(lastchar, (uint)(chr - lastchar));
-					lastchar = '\xFFFF';
-					isrange = false;
+						AddRange(lastchar, (uint)(chr-lastchar));
+					lastchar='\xFFFF';
+					isrange=false;
 				} else {
 					AddRange(lastchar);
-					lastchar = chr;
+					lastchar=chr;
 				}
 			} else {
-				lastchar = chr;
+				lastchar=chr;
 			}
 		}
-		if (lastchar != '\xFFFF') {
+		if (lastchar!='\xFFFF') {
 			if (isrange)
 				throw new Exception(String.Format("Invalid range in string: \"{0}\"", str));
 			AddRange(lastchar);

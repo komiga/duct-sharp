@@ -15,8 +15,8 @@ public class CSVMap {
 
 	public int HeaderCount {
 		get {
-			CSVRow header = GetRow(-1, false);
-			if (header != null)
+			CSVRow header=GetRow(-1, false);
+			if (header!=null)
 				return header.Count;
 			return 0;
 		}
@@ -24,9 +24,9 @@ public class CSVMap {
 
 	public int ValueCount {
 		get {
-			int count = 0;
+			int count=0;
 			foreach (CSVRow row in _rows.Values)
-				count += row.Count;
+				count+=row.Count;
 			return count;
 		}
 	}
@@ -40,12 +40,12 @@ public class CSVMap {
 	}
 
 	public CSVMap() {
-		_rows = new SortedDictionary<int, CSVRow>();
+		_rows=new SortedDictionary<int, CSVRow>();
 	}
 
 	public bool AddRow(CSVRow row) {
-		if (row != null) {
-			_rows[row.Index] = row;
+		if (row!=null) {
+			_rows[row.Index]=row;
 			return true;
 		}
 		return false;
@@ -64,15 +64,15 @@ public class CSVMap {
 	}
 
 	public CSVRow GetRow(int index, bool autocreate) {
-		CSVRow row = null;
+		CSVRow row=null;
 		if (!_rows.TryGetValue(index, out row) && autocreate)
-			row = new CSVRow(index);
+			row=new CSVRow(index);
 		return row;
 	}
 
 	public ValueVariable GetValue(int row, int column) {
-		CSVRow crow = GetRow(row);
-		if (crow != null)
+		CSVRow crow=GetRow(row);
+		if (crow!=null)
 			return crow.Get(column);
 		return null;
 	}
@@ -99,7 +99,7 @@ public class CSVRow {
 
 	int _index;
 	public int Index {
-		set { _index = value; }
+		set { _index=value; }
 		get { return _index; }
 	}
 
@@ -112,13 +112,13 @@ public class CSVRow {
 	}
 
 	public CSVRow(int index) {
-		_columns = new SortedDictionary<int, ValueVariable>();
-		_index = index;
+		_columns=new SortedDictionary<int, ValueVariable>();
+		_index=index;
 	}
 
 	public bool Add(int index, ValueVariable val) {
-		if (val != null) {
-			_columns[index] = val;
+		if (val!=null) {
+			_columns[index]=val;
 			return true;
 		}
 		return false;
@@ -129,7 +129,7 @@ public class CSVRow {
 	}
 
 	public ValueVariable Get(int index) {
-		ValueVariable val = null;
+		ValueVariable val=null;
 		if (_columns.TryGetValue(index, out val))
 			return val;
 		return null;
@@ -145,7 +145,7 @@ public class CSVRow {
 }
 
 public enum CSVToken : int {
-	None = 0,
+	None=0,
 	String,
 	QuotedString,
 	Number,
@@ -156,18 +156,18 @@ public enum CSVToken : int {
 }
 
 public class CSVParser {
-	const char CHAR_EOF = '\xFFFF';
-	const char CHAR_NEWLINE = '\n';
-	const char CHAR_CARRIAGERETURN = '\r';
-	const char CHAR_DECIMALPOINT = '.';
-	const char CHAR_QUOTE = '\"';
-	const char CHAR_BACKSLASH = '\\';
+	const char CHAR_EOF='\xFFFF';
+	const char CHAR_NEWLINE='\n';
+	const char CHAR_CARRIAGERETURN='\r';
+	const char CHAR_DECIMALPOINT='.';
+	const char CHAR_QUOTE='\"';
+	const char CHAR_BACKSLASH='\\';
 
-	static CharacterSet _numberset = new CharacterSet("0-9\\-+");
-	static CharacterSet _numeralset = new CharacterSet("0-9");
-	static CharacterSet _signset = new CharacterSet("\\-+");
+	static CharacterSet _numberset=new CharacterSet("0-9\\-+");
+	static CharacterSet _numeralset=new CharacterSet("0-9");
+	static CharacterSet _signset=new CharacterSet("\\-+");
 
-	CharacterSet _whitespaceset = new CharacterSet();
+	CharacterSet _whitespaceset=new CharacterSet();
 
 	char _curchar;
 
@@ -183,11 +183,11 @@ public class CSVParser {
 
 	CSVParserHandler _handler;
 	public CSVParserHandler Handler {
-		set { _handler = value; }
+		set { _handler=value; }
 		get { return _handler; }
 	}
 
-	Token<CSVToken> _token = new Token<CSVToken>(CSVToken.None);
+	Token<CSVToken> _token=new Token<CSVToken>(CSVToken.None);
 	public Token<CSVToken> Token {
 		get { return _token; }
 	}
@@ -200,11 +200,11 @@ public class CSVParser {
 	char _separator;
 	public char Separator {
 		set {
-			_separator = value;
+			_separator=value;
 			_whitespaceset.Clear();
-			if (_separator != ' ')
+			if (_separator!=' ')
 				_whitespaceset.AddRange(' ');
-			if (_separator != '\t')
+			if (_separator!='\t')
 				_whitespaceset.AddRange('\t');
 		}
 		get { return _separator; }
@@ -220,16 +220,16 @@ public class CSVParser {
 
 	public void InitWithStream(StreamReader stream) {
 		Clean();
-		_stream = stream;
+		_stream=stream;
 		NextChar(); // Get the first character
 	}
 
 	public void Clean() {
 		_token.Reset(CSVToken.None);
-		_line = 1;
-		_col = 0;
-		_stream = null;
-		_curchar = CHAR_EOF;
+		_line=1;
+		_col=0;
+		_stream=null;
+		_curchar=CHAR_EOF;
 	}
 
 	public bool Parse() {
@@ -237,39 +237,39 @@ public class CSVParser {
 		SkipWhitespace();
 		NextToken();
 		ReadToken();
-		if (_curchar == CHAR_EOF) {
+		if (_curchar==CHAR_EOF) {
 			_token.Reset(CSVToken.EOF);
 			_handler.HandleToken(_token); // Just to make sure the EOF gets handled (data might not end with a newline, causing an EOF token)
 			return false;
-		} else if (_token.Type == CSVToken.EOF) {
+		} else if (_token.Type==CSVToken.EOF) {
 			return false;
 		}
 		return true;
 	}
 
 	char NextChar() {
-		if (_curchar == CHAR_NEWLINE) {
+		if (_curchar==CHAR_NEWLINE) {
 			_line++;
-			_col = 0;
+			_col=0;
 		}
-		if (_stream.Peek() != -1)
-			_curchar = (char)_stream.Read();
+		if (_stream.Peek()!=-1)
+			_curchar=(char)_stream.Read();
 		else
-			_curchar = CHAR_EOF;
-		if (_curchar == CHAR_CARRIAGERETURN) // Skip \r -- IT WAS NEVER THERE
+			_curchar=CHAR_EOF;
+		if (_curchar==CHAR_CARRIAGERETURN) // Skip \r -- IT WAS NEVER THERE
 			NextChar();
-		else if (_curchar != CHAR_EOF)
+		else if (_curchar!=CHAR_EOF)
 			_col++;
 		return _curchar;
 	}
 	
 	void SkipWhitespace() {
-		while (_curchar != CHAR_EOF && _whitespaceset.Contains(_curchar))
+		while (_curchar!=CHAR_EOF && _whitespaceset.Contains(_curchar))
 			NextChar();
 	}
 
 	Token<CSVToken> NextToken() {
-		//if (_curchar == '\n')
+		//if (_curchar=='\n')
 		//	Console.WriteLine("CSVParser.NextToken() char: \\n");
 		//else
 		//	Console.WriteLine("CSVParser.NextToken() char: {0}", _curchar);
@@ -277,26 +277,26 @@ public class CSVParser {
 		_token.SetPosition(_line, _col);
 		switch (_curchar) {
 			case CHAR_QUOTE:
-				_token.Type = CSVToken.QuotedString;
+				_token.Type=CSVToken.QuotedString;
 				break;
 			case CHAR_EOF:
-				_token.Type = CSVToken.EOF;
+				_token.Type=CSVToken.EOF;
 				break;
 			case CHAR_NEWLINE:
-				_token.Type = CSVToken.EOL;
+				_token.Type=CSVToken.EOL;
 				break;
 			case CHAR_DECIMALPOINT:
-				_token.Type = CSVToken.Double;
+				_token.Type=CSVToken.Double;
 				_token.Add(_curchar); // Add the decimal
 				break;
 			default:
-				if (_curchar == _separator) {
-					_token.Type = CSVToken.Separator;
+				if (_curchar==_separator) {
+					_token.Type=CSVToken.Separator;
 				} else if (_numberset.Contains(_curchar)) {
-					_token.Type = CSVToken.Number;
+					_token.Type=CSVToken.Number;
 					_token.Add(_curchar); // Add the number/sign
 				} else {
-					_token.Type = CSVToken.String;
+					_token.Type=CSVToken.String;
 				}
 				break;
 		}
@@ -339,11 +339,11 @@ public class CSVParser {
 		switch (_token.Type) {
 			case CSVToken.Number:
 				if (_token.Compare(_signset))
-					_token.Type = CSVToken.String;
+					_token.Type=CSVToken.String;
 				break;
 			case CSVToken.Double:
 				if (_token.Compare(_signset) || _token.Compare(CHAR_DECIMALPOINT))
-					_token.Type = CSVToken.String;
+					_token.Type=CSVToken.String;
 				break;
 			default:
 				break;
@@ -353,21 +353,21 @@ public class CSVParser {
 	}
 	
 	void ReadNumberToken() {
-		while (_curchar != CHAR_EOF) {
-			if (_curchar == CHAR_QUOTE) {
+		while (_curchar!=CHAR_EOF) {
+			if (_curchar==CHAR_QUOTE) {
 				throw new CSVParserException(CSVParserError.PARSER, "ReadNumberToken", _token, this, "Unexpected quote");
-			} else if (_curchar == _separator || _curchar == CHAR_NEWLINE || _whitespaceset.Contains(_curchar)) {
+			} else if (_curchar==_separator || _curchar==CHAR_NEWLINE || _whitespaceset.Contains(_curchar)) {
 				break;
 			} else if (_numeralset.Contains(_curchar)) {
 				_token.Add(_curchar);
-			} else if (_curchar == CHAR_DECIMALPOINT) {
+			} else if (_curchar==CHAR_DECIMALPOINT) {
 				_token.Add(_curchar);
 				NextChar();
-				_token.Type = CSVToken.Double;
+				_token.Type=CSVToken.Double;
 				ReadDoubleToken();
 				break;
 			} else {
-				_token.Type = CSVToken.String;
+				_token.Type=CSVToken.String;
 				ReadStringToken();
 				break;
 			}
@@ -376,16 +376,16 @@ public class CSVParser {
 	}
 	
 	void ReadDoubleToken() {
-		while (_curchar != CHAR_EOF) {
-			if (_curchar == CHAR_QUOTE) {
+		while (_curchar!=CHAR_EOF) {
+			if (_curchar==CHAR_QUOTE) {
 				throw new CSVParserException(CSVParserError.PARSER, "ReadDoubleToken", _token, this, "Unexpected quote");
-			} else if (_curchar == _separator || _curchar == CHAR_NEWLINE || _whitespaceset.Contains(_curchar)) {
+			} else if (_curchar==_separator || _curchar==CHAR_NEWLINE || _whitespaceset.Contains(_curchar)) {
 				break;
 			} else if (_numeralset.Contains(_curchar)) {
 				_token.Add(_curchar);
-			} else { // (_curchar == CHAR_DECIMALPOINT)
+			} else { // (_curchar==CHAR_DECIMALPOINT)
 				// The token should've already contained a decimal point, so it must be a string.
-				_token.Type = CSVToken.String;
+				_token.Type=CSVToken.String;
 				ReadStringToken();
 				break;
 			}
@@ -394,16 +394,16 @@ public class CSVParser {
 	}
 
 	void ReadStringToken() {
-		while (_curchar != CHAR_EOF) {
-			if (_curchar == CHAR_QUOTE) {
+		while (_curchar!=CHAR_EOF) {
+			if (_curchar==CHAR_QUOTE) {
 				throw new CSVParserException(CSVParserError.PARSER, "ReadStringToken", _token, this, "Unexpected quote");
-			} else if (_curchar == CHAR_BACKSLASH) {
-				char c = Variable.GetEscapeChar(NextChar());
-				if (c != CHAR_EOF)
+			} else if (_curchar==CHAR_BACKSLASH) {
+				char c=Variable.GetEscapeChar(NextChar());
+				if (c!=CHAR_EOF)
 					_token.Add(c);
 				else
 					throw new CSVParserException(CSVParserError.PARSER, "ReadStringToken", _token, this, String.Format("Unknown escape sequence: {0}", _curchar));
-			} else if (_curchar == _separator || _curchar == CHAR_NEWLINE /*|| _whitespaceset.Contains(_curchar)*/) {
+			} else if (_curchar==_separator || _curchar==CHAR_NEWLINE /*|| _whitespaceset.Contains(_curchar)*/) {
 				break;
 			} else {
 				_token.Add(_curchar);
@@ -413,25 +413,25 @@ public class CSVParser {
 	}
 
 	void ReadQuotedStringToken() {
-		bool eolreached = false;
+		bool eolreached=false;
 		NextChar(); // Skip the first character (it will be the initial quote)
-		while (_curchar != CHAR_QUOTE) {
-			if (_curchar == CHAR_EOF) {
+		while (_curchar!=CHAR_QUOTE) {
+			if (_curchar==CHAR_EOF) {
 				throw new CSVParserException(CSVParserError.PARSER, "ReadQuotedStringToken", _token, this, "Encountered EOF whilst reading quoted string");
-			} else if (_curchar == CHAR_BACKSLASH) {
-				char c = Variable.GetEscapeChar(NextChar());
-				if (c != CHAR_EOF)
+			} else if (_curchar==CHAR_BACKSLASH) {
+				char c=Variable.GetEscapeChar(NextChar());
+				if (c!=CHAR_EOF)
 					_token.Add(c);
 				else
 					throw new CSVParserException(CSVParserError.PARSER, "ReadQuotedStringToken", _token, this, String.Format("Unknown escape sequence: {0}", _curchar));
 			} else {
 				if (!eolreached)
 					_token.Add(_curchar);
-				if (_curchar == CHAR_NEWLINE) {
+				if (_curchar==CHAR_NEWLINE) {
 					//throw new CSVParserException(CSVParserError.PARSER, "ReadQuotedStringToken", _token, this, "Unclosed quote (met EOL character)");
-					eolreached = true;
+					eolreached=true;
 				} else if (eolreached && !_whitespaceset.Contains(_curchar)) {
-					eolreached = false;
+					eolreached=false;
 					_token.Add(_curchar);
 				}
 			}
@@ -441,33 +441,33 @@ public class CSVParser {
 }
 
 public abstract class CSVParserHandler {
-	protected CSVParser _parser = new CSVParser();
+	protected CSVParser _parser=new CSVParser();
 	protected CSVMap _map;
 	protected CSVRow _currentrow;
 	protected int _rowindex, _beginningrow;
 	protected int _columnindex;
 
 	protected virtual void Init() {
-		_parser.Handler = this;
+		_parser.Handler=this;
 	}
 
 	public virtual void SetSeparator(char separator) {
-		_parser.Separator = separator;
+		_parser.Separator=separator;
 	}
 
 	public virtual void SetBeginningRow(int beginningrow) {
-		_beginningrow = beginningrow;
+		_beginningrow=beginningrow;
 	}
 
 	protected virtual void Clean() {
-		_map = null;
-		_currentrow = null;
-		_rowindex = _beginningrow;
-		_columnindex = 0;
+		_map=null;
+		_currentrow=null;
+		_rowindex=_beginningrow;
+		_columnindex=0;
 	}
 
 	protected virtual void Process() {
-		_map = new CSVMap();
+		_map=new CSVMap();
 		while (_parser.Parse()) {
 		}
 		Finish();
@@ -477,7 +477,7 @@ public abstract class CSVParserHandler {
 		_parser.InitWithStream(stream);
 		Clean();
 		Process();
-		CSVMap map = _map; // Store before cleaning
+		CSVMap map=_map; // Store before cleaning
 		Clean();
 		_parser.Clean();
 		return map;
@@ -489,7 +489,7 @@ public abstract class CSVParserHandler {
 
 public enum CSVParserError {
 	/** Parser error. */
-	UNKNOWN = 0,
+	UNKNOWN=0,
 	/** Parser error. */
 	PARSER,
 	/** Memory allocation error (e.g. out of memory). */
@@ -506,21 +506,21 @@ public class CSVParserException : Exception {
 		Constructor with values.
 	*/
 	public CSVParserException(CSVParserError error, string reporter, Token<CSVToken> token, CSVParser parser, string message) {
-		_error = error;
-		_reporter = reporter;
-		_token = token;
-		_parser = parser;
-		_message = message;
-		if (_parser != null && _token == null)
-			_token = _parser.Token;
+		_error=error;
+		_reporter=reporter;
+		_token=token;
+		_parser=parser;
+		_message=message;
+		if (_parser!=null && _token==null)
+			_token=_parser.Token;
 	}
 
 	public override string ToString() {
-		if (_token != null && _parser != null)
+		if (_token!=null && _parser!=null)
 			return String.Format("({0}) [{1}] from line: {2}, col: {3} to line: {4}, col: {5}: {6}", _reporter, ErrorName(_error), _token.Line, _token.Column, _parser.Line, _parser.Column, _message);
-		else if (_token != null)
+		else if (_token!=null)
 			return String.Format("({0}) [{1}] at line: {2}, col: {3}: {4}", _reporter, ErrorName(_error), _token.Line, _token.Column, _message);
-		else if (_parser != null)
+		else if (_parser!=null)
 			return String.Format("({0}) [{1}] at line: {2}, col: {3}: {4}", _reporter, ErrorName(_error), _parser.Line, _parser.Column, _message);
 		else
 			return String.Format("({0}) [{1}]: {2}", _reporter, ErrorName(_error), _message);
@@ -547,16 +547,16 @@ class StandardCSVParserHandler : CSVParserHandler {
 
 	protected override void Clean() {
 		base.Clean();
-		_lastempty = true;
+		_lastempty=true;
 	}
 
 	public override void HandleToken(Token<CSVToken> token) {
 		switch (token.Type) {
 			case CSVToken.String:
-				string str = token.ToString().Trim();
-				int bv = Variable.StringToBool(str);
-				if (bv != -1)
-					AddToRow(new BoolVariable(bv == 1 ? true : false));
+				string str=token.ToString().Trim();
+				int bv=Variable.StringToBool(str);
+				if (bv!=-1)
+					AddToRow(new BoolVariable(bv==1 ? true : false));
 				else
 					AddToRow(new StringVariable(str));
 				break;
@@ -573,16 +573,16 @@ class StandardCSVParserHandler : CSVParserHandler {
 				if (_lastempty)
 					AddToRow(new StringVariable());
 				_columnindex++;
-				_lastempty = true;
+				_lastempty=true;
 				break;
 			case CSVToken.EOL:
 			case CSVToken.EOF:
-				if (_lastempty && _columnindex != 0)
+				if (_lastempty && _columnindex!=0)
 					AddToRow(new StringVariable());
 				NewRow();
 				break;
 			//default:
-			//	//DebugLog("(StandardCSVParserHandler.handleToken) Unhandled token of type " + token.typeAsString())
+			//	//DebugLog("(StandardCSVParserHandler.handleToken) Unhandled token of type "+token.typeAsString())
 			//	break;
 		}
 	}
@@ -593,25 +593,25 @@ class StandardCSVParserHandler : CSVParserHandler {
 	}
 
 	void AddToRow(ValueVariable val) {
-		if (_currentrow == null)
+		if (_currentrow==null)
 			NewRow();
 		//_currentrow.Add(new CSVRecord(_columnindex, val));
 		_currentrow.Add(_columnindex, val);
-		_lastempty = false;
+		_lastempty=false;
 	}
 
 	void NewRow() {
-		if (_currentrow != null)
+		if (_currentrow!=null)
 			_map.AddRow(_currentrow);
-		_currentrow = new CSVRow(_rowindex);
+		_currentrow=new CSVRow(_rowindex);
 		_rowindex++;
-		_columnindex = 0;
-		_lastempty = true;
+		_columnindex=0;
+		_lastempty=true;
 	}
 }
 
 public class CSVFormatter {
-	static StandardCSVParserHandler _handler = new StandardCSVParserHandler();
+	static StandardCSVParserHandler _handler=new StandardCSVParserHandler();
 
 	public static bool FormatRow(CSVRow row, out string result) {
 		return FormatRow(row, out result, ',');
@@ -622,18 +622,18 @@ public class CSVFormatter {
 	}
 
 	public static bool FormatRow(CSVRow row, out string result, char separator, ValueFormat varformat) {
-		if (row != null) {
-			StringBuilder builder = new StringBuilder(256);
-			int lastcolumn = 0;
+		if (row!=null) {
+			StringBuilder builder=new StringBuilder(256);
+			int lastcolumn=0;
 			foreach (KeyValuePair<int, ValueVariable> pair in row) {
-				for (; lastcolumn < pair.Key; ++lastcolumn)
+				for (; lastcolumn<pair.Key; ++lastcolumn)
 					builder.Append(separator);
 				builder.Append(pair.Value.GetValueFormatted(varformat));
 			}
-			result = builder.ToString();
+			result=builder.ToString();
 			return true;
 		}
-		result = String.Empty; // clear the result string
+		result=String.Empty; // clear the result string
 		return false;
 	}
 
@@ -651,8 +651,8 @@ public class CSVFormatter {
 
 	public static CSVMap LoadFromFile(string path, char separator, bool header, Encoding encoding) {
 		//try {
-			StreamReader stream = new StreamReader(path, encoding, false);
-			CSVMap map = LoadFromStream(stream, separator, header);
+			StreamReader stream=new StreamReader(path, encoding, false);
+			CSVMap map=LoadFromStream(stream, separator, header);
 			stream.Close();
 			return map;
 		//} catch (FileNotFoundException e) {
@@ -670,7 +670,7 @@ public class CSVFormatter {
 	}
 
 	public static CSVMap LoadFromStream(StreamReader stream, char separator, bool header) {
-		if (stream != null) {
+		if (stream!=null) {
 			_handler.SetBeginningRow(header ? -1 : 0);
 			_handler.SetSeparator(separator);
 			return _handler.ProcessFromStream(stream);
@@ -692,8 +692,8 @@ public class CSVFormatter {
 
 	public static bool WriteToFile(CSVMap map, string path, char separator, ValueFormat varformat, Encoding encoding) {
 		//try {
-			StreamWriter stream = new StreamWriter(path, false, encoding);
-			bool ret = WriteToStream(map, stream, separator, varformat);
+			StreamWriter stream=new StreamWriter(path, false, encoding);
+			bool ret=WriteToStream(map, stream, separator, varformat);
 			stream.Close();
 			return ret;
 		//} catch {
@@ -702,16 +702,16 @@ public class CSVFormatter {
 	}
 
 	public static bool WriteToStream(CSVMap map, StreamWriter stream, char separator, ValueFormat varformat) {
-		if (map != null && stream != null) {
+		if (map!=null && stream!=null) {
 			string temp;
-			bool first = false;
-			int lastrow = 0;
+			bool first=false;
+			int lastrow=0;
 			foreach (KeyValuePair<int, CSVRow> pair in map) {
 				if (!first) {
-					lastrow = pair.Key;
-					first = true;
+					lastrow=pair.Key;
+					first=true;
 				}
-				for (; lastrow != pair.Key; ++lastrow)
+				for (; lastrow!=pair.Key; ++lastrow)
 					stream.WriteLine();
 				if (FormatRow(pair.Value, out temp, separator, varformat)) {
 					stream.Write(temp);

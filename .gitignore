@@ -3,3 +3,8 @@
 *.dll
 *.pidb
 *.mdb
+# Makefiles and build data
+Makefile
+ductsharp.make
+out/
+lib/
