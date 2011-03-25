@@ -373,19 +373,23 @@ public abstract class Variable {
 					continue;
 				case CHAR_BACKSLASH:
 					if ((i+1)!=str.Length) {
-						switch (GetEscapeChar(str[i+1])) {
+						char c2=GetEscapeChar(str[i+1]);
+						switch (c2) {
 						case CHAR_BACKSLASH:
-							i++; // We don't want to see the slash again; the continue below makes the i-uppage 2
+							i++; // we don't want to see the slash again; the continue below makes the i-uppage 2
 							goto case CHAR_EOF;
 						case CHAR_EOF:
 							builder.Append("\\\\");
-							continue;
+							break;
+						default:
+							builder.Append('\\'+c2);
+							i++; // already a valid escape sequence
+							break;
 						}
 					} else {
 						builder.Append("\\\\");
-						continue;
 					}
-					break;
+					continue;
 				}
 			}
 			if ((format&ValueFormat.STRING_ESCAPE_CONTROL)!=0 && !isquoted) {
