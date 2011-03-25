@@ -100,12 +100,12 @@ public enum ValueFormat {
 		String quote-bool format flag.
 		This format will quote a string if it equals "true" or "false" as a type safeguard. e.g. "true" -> "\\"true\\"".
 	*/
-	STRING_SAFE_BOOL=0x100,
+	STRING_SAFE_BOOL=0x0100,
 	/**
 		String quote-number format flag.
 		This format will quote a string if it is a number as a type safeguard. e.g. "1234.5678" -> "\\"1234.5678\\"".
 	*/
-	STRING_SAFE_NUMBER=0x200,
+	STRING_SAFE_NUMBER=0x0200,
 	/**
 		String escape-newline format flag.
 		This format will replace the following characters with escape sequences, if the string is not surrounded in quotes: '\\n' '\\r'
@@ -141,12 +141,12 @@ public enum ValueFormat {
 		Boolean quote format flag.
 		Converts the boolean value to a string ("true", "false"). e.g. false -> "false", true -> "true".
 	*/
-	BOOL_QUOTE=0x10000,
+	BOOL_QUOTE=0x010000,
 	/**
 		Default boolean format flag.
 		Unset flag (no formatting).
 	*/
-	BOOL_DEFAULT=0,
+	BOOL_DEFAULT=NONE,
 
 	/**
 		Default name format flag.
