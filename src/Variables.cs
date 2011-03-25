@@ -754,7 +754,7 @@ public class StringVariable : ValueVariable {
 			str=String.Format("\"{0}\"", _value);
 		else if ((format&ValueFormat.STRING_SAFE_NUMBER)!=0 && isNumeric(true))
 			str=String.Format("\"{0}\"", _value);
-		else if ((format&ValueFormat.STRING_QUOTE_CONTROL)!=0 && (_name.IndexOf(CHAR_OPENBRACE)>-1 || _name.IndexOf(CHAR_CLOSEBRACE)>-1 || _name.IndexOf(CHAR_EQUALSIGN)>-1))
+		else if ((format&ValueFormat.STRING_QUOTE_CONTROL)!=0 && (_value.IndexOf(CHAR_OPENBRACE)>-1 || _value.IndexOf(CHAR_CLOSEBRACE)>-1 || _value.IndexOf(CHAR_EQUALSIGN)>-1))
 			str=String.Format("\"{0}\"", _value);
 		else
 			str=_value;
