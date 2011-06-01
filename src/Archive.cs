@@ -76,7 +76,18 @@ public abstract class Archive {
 	}
 	
 	public virtual bool Save() {
-		return Save(Opened);
+		if (!_readable && _writeable) {
+			return Save(true);
+		} else if (Opened) {
+			bool readable=_readable, writeable=_writeable;
+			bool rc=Save(false);
+			if (rc) {
+				return Open(false, readable, writeable);
+			}
+		} else {
+			return Save(false);
+		}
+		return false;
 	}
 	
 	public virtual bool Save(bool keepopen) {
@@ -167,7 +178,7 @@ public abstract class Entry {
 			if (value)
 				_flags|=EntryFlag.COMPRESSED;
 			else
-				_flags&=EntryFlag.COMPRESSED;
+				_flags&=~EntryFlag.COMPRESSED;
 		}
 	}
 	

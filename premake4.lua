@@ -3,7 +3,7 @@
 local name="ductsharp"
 
 if _ACTION == "clean" then
-	os.rmdir(outpath)
+	os.rmdir("obj")
 end
 
 solution(name)
