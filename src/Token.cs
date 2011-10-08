@@ -74,22 +74,22 @@ public class Token<_TokenType> {
 
 	public int ToInt() {
 		string str=_builder.ToString();
-		return Convert.ToInt32(str);
+		return Convert.ToInt32(str, System.Globalization.CultureInfo.InvariantCulture);
 	}
 
 	public long ToLong() {
 		string str=_builder.ToString();
-		return Convert.ToInt64(str);
+		return Convert.ToInt64(str, System.Globalization.CultureInfo.InvariantCulture);
 	}
 
 	public float ToFloat() {
 		string str=_builder.ToString();
-		return Convert.ToSingle(str);
+		return Convert.ToSingle(str, System.Globalization.CultureInfo.InvariantCulture);
 	}
 
 	public double ToDouble() {
 		string str=_builder.ToString();
-		return Convert.ToDouble(str);
+		return Convert.ToDouble(str, System.Globalization.CultureInfo.InvariantCulture);
 	}
 }
 
