@@ -73,11 +73,11 @@ public class Template {
 			return true; // NULL identity matches any name
 		}
 	}
-	
+
 	bool _compareNames(string a, string b, bool casesens) {
 		return String.Compare(a, b, !casesens)==0;
 	}
-	
+
 	bool __matchname(int mc, string[] iden, string name, bool casesens, VariableType infinitism) {
 		if (iden.Length==0)
 			return true;
@@ -240,7 +240,8 @@ public class Template {
 	public int RenameIdentifiers(CollectionVariable collection, string name) {
 		int count=0;
 		if (collection!=null) {
-			foreach (Identifier identifier in collection.Children) {
+			foreach (Variable v in collection.Children) {
+				Identifier identifier=v as Identifier;
 				if (ValidateIdentifier(identifier)) {
 					identifier.Name=name;
 					count++;
@@ -253,7 +254,8 @@ public class Template {
 	public int RenameValues(CollectionVariable collection, string name) {
 		int count=0;
 		if (collection!=null) {
-			foreach (ValueVariable val in collection.Children) {
+			foreach (Variable v in collection.Children) {
+				ValueVariable val = v as ValueVariable;
 				if (ValidateValue(val)) {
 					val.Name=name;
 					count++;
@@ -265,7 +267,8 @@ public class Template {
 
 	public Identifier GetMatchingIdentifier(CollectionVariable collection) {
 		if (collection!=null) {
-			foreach (Identifier identifier in collection.Children) {
+			foreach (Variable v in collection.Children) {
+				Identifier identifier=v as Identifier;
 				if (ValidateIdentifier(identifier))
 					return identifier;
 			}
@@ -275,7 +278,8 @@ public class Template {
 
 	public ValueVariable GetMatchingValue(CollectionVariable collection) {
 		if (collection!=null) {
-			foreach (ValueVariable val in collection.Children) {
+			foreach (Variable v in collection.Children) {
+				ValueVariable val = v as ValueVariable;
 				if (ValidateValue(val))
 					return val;
 			}
